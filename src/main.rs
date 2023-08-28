@@ -30,35 +30,35 @@ fn read_stdin() -> String {
     return buffer;
 }
 
-fn random_file_from_dir(dir: &str, range: i32) -> String {
-    let mut prefix: String = "voice".to_owned();
+fn random_file_from_dir(dir: &str) -> String {
+    let prefix: String = "voice".to_owned();
     let mut rng = rand::thread_rng();
-    let index = rng.gen_range(0..range) + 1;
+    let index = rng.gen_range(0..dir_file_count(dir)) + 1;
     let suffix = ".wav";
     let filename = format!("{dir}/{prefix}{index}{suffix}");
-    println!("random audio file: {}", filename);
     return filename;
 }
 
 fn dir_file_count(dir: &str) -> i32 {
     let mut count = 0;
-    println!("audio directory: {}", dir);
-    for file in fs::read_dir(dir) {
+    for _file in fs::read_dir(dir).unwrap() {
         count += 1;
     }
-    println!("{}", count);
     return count;
 }
 
 fn main() {
+    let sentence = read_stdin();
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
     let sink = Sink::try_new(&stream_handle).unwrap();
     let audio_folder = "/Users/kline/projects/summer/georgeos/voice/src/audio";
-    for _i in 0..count_words(&read_stdin()) {
-        let rnd_file = random_file_from_dir(audio_folder, 18);
+    dir_file_count(audio_folder);
+    for _i in 0..count_words(&sentence) {
+        let rnd_file = random_file_from_dir(audio_folder);
         let file = BufReader::new(File::open(rnd_file).unwrap());
         let source = Decoder::new(file).unwrap();
         sink.append(source);
     }
+    println!("{}", sentence);
     sink.sleep_until_end();
 }
