@@ -55,7 +55,7 @@ fn main() {
     let sink = Sink::try_new(&stream_handle).unwrap();
     let audio_folder = "/Users/kline/projects/summer/georgeos/voice/src/audio";
     for _i in 0..count_words(&read_stdin()) {
-        let rnd_file = random_file_from_dir(audio_folder, 6);
+        let rnd_file = random_file_from_dir(audio_folder, 18);
         let file = BufReader::new(File::open(rnd_file).unwrap());
         let source = Decoder::new(file).unwrap();
         sink.append(source);
