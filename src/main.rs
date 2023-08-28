@@ -1,10 +1,9 @@
 use rand::Rng;
 use rodio::{source::Buffered, Decoder, OutputStream, Sink, Source};
-use std::convert::AsRef;
 use std::io::BufReader;
-use std::path::Path;
 use std::{fs, io};
 use std::{fs::File, io::Write};
+extern crate vader_sentiment;
 
 // Count words in a string - very rough implementation
 fn count_words(sentence: &str) -> i32 {
@@ -30,8 +29,8 @@ fn read_stdin() -> String {
     return buffer;
 }
 
-fn random_file_from_dir(dir: &str) -> String {
-    let prefix: String = "voice".to_owned();
+fn random_file_from_dir(dir: &str, pre: &str) -> String {
+    let prefix: String = pre.to_owned();
     let mut rng = rand::thread_rng();
     let index = rng.gen_range(0..dir_file_count(dir)) + 1;
     let suffix = ".wav";
@@ -49,15 +48,26 @@ fn dir_file_count(dir: &str) -> i32 {
 
 fn main() {
     let sentence = read_stdin();
+    let analyzer = vader_sentiment::SentimentIntensityAnalyzer::new();
+    let emotion = analyzer.polarity_scores(&sentence);
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
     let sink = Sink::try_new(&stream_handle).unwrap();
-    let audio_folder = "/Users/kline/projects/summer/georgeos/voice/src/audio";
-    dir_file_count(audio_folder);
-    for _i in 0..count_words(&sentence) {
-        let rnd_file = random_file_from_dir(audio_folder);
-        let file = BufReader::new(File::open(rnd_file).unwrap());
-        let source = Decoder::new(file).unwrap();
-        sink.append(source);
+    if emotion.get("compound").unwrap() >= &0.0 {
+        let audio_folder = "/Users/kline/projects/summer/georgeos/voice/src/audio/pos";
+        for _i in 0..count_words(&sentence) {
+            let rnd_file = random_file_from_dir(audio_folder, "voice");
+            let file = BufReader::new(File::open(rnd_file).unwrap());
+            let source = Decoder::new(file).unwrap();
+            sink.append(source);
+        }
+    } else {
+        let audio_folder = "/Users/kline/projects/summer/georgeos/voice/src/audio/neg";
+        for _i in 0..count_words(&sentence) {
+            let rnd_file = random_file_from_dir(audio_folder, "neg");
+            let file = BufReader::new(File::open(rnd_file).unwrap());
+            let source = Decoder::new(file).unwrap();
+            sink.append(source);
+        }
     }
     println!("{}", sentence);
     sink.sleep_until_end();

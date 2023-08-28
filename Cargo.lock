@@ -387,6 +387,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "maplit"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3e2e65a1a2e43cfcb47a895c4c8b10d1f4a61097f9f254f183aee60cad9c651d"
+
+[[package]]
 name = "memchr"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -665,12 +671,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "random"
-version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61c7093a82705b48f10d4b165c6482dbe9f58cd63a870d85537e857b2badbd88"
-
-[[package]]
 name = "raw-window-handle"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -925,10 +925,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "unicase"
+version = "2.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f7d2d4dafb69621809a81864c9c1b864479e1235c0dd4e199924b9742439ed89"
+dependencies = [
+ "version_check",
+]
+
+[[package]]
 name = "unicode-ident"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "301abaae475aa91687eb82514b328ab47a211a533026cb25fc3e519b86adfc3c"
+
+[[package]]
+name = "vader_sentiment"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f79fb65bbfaf53d62afa05b1d162ff245cda71257d094e5d2de022fa5cff112"
+dependencies = [
+ "lazy_static",
+ "maplit",
+ "regex",
+ "unicase",
+]
 
 [[package]]
 name = "version_check"
@@ -940,11 +961,10 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 name = "voice"
 version = "0.1.0"
 dependencies = [
- "cpal",
  "pitch_shift",
  "rand",
- "random",
  "rodio",
+ "vader_sentiment",
 ]
 
 [[package]]
