@@ -8,5 +8,6 @@ edition = "2021"
 [dependencies]
 cpal = "0.15.2"
 pitch_shift = "1.0.0"
+rand = "0.8.5"
 random = "0.14.0"
 rodio = "0.17.1"
