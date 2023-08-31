@@ -1,10 +1,8 @@
 use rand::Rng;
-use rodio::{source, Sample};
-use rodio::{source::Buffered, Decoder, OutputStream, Sink, Source};
-use std::error::Error;
+use rodio::{Decoder, OutputStream, Sink};
+use std::fs::File;
 use std::io::BufReader;
 use std::{fs, io};
-use std::{fs::File, io::Write};
 extern crate vader_sentiment;
 
 fn sentence_to_vec(sentence: &str) -> Vec<&str> {
